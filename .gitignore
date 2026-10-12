@@ -1,0 +1,14 @@
+node_modules/
+.cache/
+.env
+.env.*
+auth*.json
+api_key*
+*token*
+*.log
+*.docx
+*.pdf
+*.zip
+__pycache__/
+.DS_Store
+Thumbs.db

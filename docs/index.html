@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="ELIAS: region and endpoint grounding for bilingual navigation instruction annotation. Preliminary research; paper and implementation coming soon.">
+  <meta name="theme-color" content="#101719">
+  <meta property="og:title" content="ELIAS | Region and Endpoint Grounding">
+  <meta property="og:description" content="Evidence-grounded bilingual navigation annotation. Research preview; paper and code coming soon.">
+  <meta property="og:image" content="https://tangyipeng100.github.io/elias-navigation-annotation/assets/method.png">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="canonical" href="https://tangyipeng100.github.io/elias-navigation-annotation/">
+  <title>ELIAS | Region and Endpoint Grounding</title>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#overview">Skip to content</a>
+  <header class="nav">
+    <a class="brand" href="#top"><span class="brand-mark">E</span> ELIAS <span class="brand-label" data-zh="研究项目" data-en="RESEARCH PROJECT">RESEARCH PROJECT</span></a>
+    <nav aria-label="Main navigation">
+      <a href="#method" data-zh="方法" data-en="Method">Method</a>
+      <a href="#workbench" data-zh="标注系统" data-en="Workbench">Workbench</a>
+      <a href="#results" data-zh="结果" data-en="Results">Results</a>
+      <a href="#release" data-zh="发布计划" data-en="Release">Release</a>
+    </nav>
+    <div class="language" role="group" aria-label="Language">
+      <button type="button" data-lang="en" aria-pressed="true">EN</button>
+      <button type="button" data-lang="zh" aria-pressed="false">中文</button>
+    </div>
+  </header>
+  <main>
+    <section class="hero" id="top">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="status-dot"></span> <span data-zh="论文尚未接收 · 研究展示" data-en="NOT YET ACCEPTED · RESEARCH PREVIEW">NOT YET ACCEPTED · RESEARCH PREVIEW</span></p>
+        <h1 data-zh="区域与终点的语义对齐" data-en="Region and Endpoint Grounding">Region and<br>Endpoint Grounding</h1>
+        <p class="subtitle" data-zh="面向双语导航指令的分阶段标注" data-en="for Bilingual Navigation Instruction Annotation">for Bilingual Navigation Instruction Annotation</p>
+        <p class="hero-lead" data-zh="流畅的语言，不等于准确的空间描述。ELIAS 将区域、路线动作和停止位置分别与轨迹证据对齐，再生成中英文导航指令。" data-en="Fluent language is not enough. ELIAS grounds regions, route actions, and stopping relations in trajectory evidence before generating Chinese–English navigation instructions.">Fluent language is not enough. ELIAS grounds regions, route actions, and stopping relations in trajectory evidence before generating Chinese–English navigation instructions.</p>
+        <div class="actions">
+          <a class="button primary" href="#method" data-zh="了解方法 ↗" data-en="Explore the method ↗">Explore the method ↗</a>
+          <a class="button secondary" href="https://github.com/tangyipeng100/elias-navigation-annotation" target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+          <a class="button paper-link" href="#release"><span>Paper &amp; code</span><small>Coming soon</small></a>
+        </div>
+        <p class="hero-name">EVIDENCE-LOCKED INSTRUCTION ANNOTATION SYSTEM</p>
+      </div>
+      <figure class="hero-observation">
+        <img src="assets/terminal-observation.jpg" width="640" height="569" fetchpriority="high" alt="Original terminal camera view with a green chair on the left and a cabinet beside the stopping location.">
+        <figcaption>
+          <span class="eyebrow" data-zh="真实机器人观察" data-en="ORIGINAL ROBOT OBSERVATION">ORIGINAL ROBOT OBSERVATION</span>
+          <strong data-zh="朝向哪里，与停在哪里，是不同的关系。" data-en="Facing an object ≠ stopping beside it.">Facing an object ≠ stopping beside it.</strong>
+          <span data-zh="前向锚点 + 停靠锚点" data-en="Forward anchor + place anchor">Forward anchor + place anchor</span>
+        </figcaption>
+      </figure>
+      <div class="hero-strip">
+        <span><b>40</b><span data-zh="配对样本组" data-en="paired sample groups">paired sample groups</span></span>
+        <span><b>120</b><span data-zh="冻结候选" data-en="frozen candidates">frozen candidates</span></span>
+        <span><b>EN / ZH</b><span data-zh="双语指令" data-en="bilingual instructions">bilingual instructions</span></span>
+      </div>
+    </section>
+
+    <section class="section overview" id="overview">
+      <div class="section-title"><p class="eyebrow">01 / OVERVIEW</p><h2 data-zh="把指令写对，先把证据分清。" data-en="Separate the evidence before writing the instruction.">Separate the evidence before writing the instruction.</h2></div>
+      <div class="overview-copy">
+        <p data-zh="直接把录制的轨迹交给多模态模型，可能得到区域错误、漏掉转弯，或将前方物体误写成停靠位置的指令。这些错误会降低轨迹—指令对的质量。" data-en="A multimodal model can describe a recorded trajectory fluently while misidentifying a region, omitting a turn, or confusing an object ahead with the stopping place. These errors weaken trajectory–instruction pairs.">A multimodal model can describe a recorded trajectory fluently while misidentifying a region, omitting a turn, or confusing an object ahead with the stopping place. These errors weaken trajectory–instruction pairs.</p>
+        <p data-zh="ELIAS 按职责组织顺序帧、末端帧、侧向观察、运动几何与场景先验。先开放观察终点，再检索规范名称；独立一致性检查决定接受、复核或暂不判断。" data-en="ELIAS assigns distinct roles to ordered frames, terminal views, lateral observations, motion geometry, and scene priors. Open terminal observation precedes canonical retrieval; a separate consistency gate decides accept, review, or abstain.">ELIAS assigns distinct roles to ordered frames, terminal views, lateral observations, motion geometry, and scene priors. Open terminal observation precedes canonical retrieval; a separate consistency gate decides accept, review, or abstain.</p>
+      </div>
+      <div class="evidence-ledger">
+        <div><span>01</span><h3 data-zh="区域" data-en="Region">Region</h3><p data-zh="真正进入，还是仅通过门口看见？" data-en="Entered, or only visible through a doorway?">Entered, or only visible through a doorway?</p></div>
+        <div><span>02</span><h3 data-zh="路线动作" data-en="Route actions">Route actions</h3><p data-zh="转弯与行进顺序是否保留？" data-en="Are turns and movement order preserved?">Are turns and movement order preserved?</p></div>
+        <div><span>03</span><h3 data-zh="终点" data-en="Endpoint">Endpoint</h3><p data-zh="机器人面向什么，又停在什么旁边？" data-en="What does the robot face, and where does it stop?">What does the robot face, and where does it stop?</p></div>
+      </div>
+    </section>
+
+    <section class="section light" id="method">
+      <div class="section-title"><p class="eyebrow">02 / METHOD</p><h2 data-zh="场景先验注入，分阶段语义对齐。" data-en="Scene priors meet staged grounding.">Scene priors meet staged grounding.</h2><p data-zh="先验提供规范名称和空间关系，不代替轨迹证据。它不进入开放终点观察阶段。" data-en="The prior supplies canonical names and spatial context, not proof that a route enters a region. Open terminal observation remains prior-free.">The prior supplies canonical names and spatial context, not proof that a route enters a region. Open terminal observation remains prior-free.</p></div>
+      <figure class="paper-figure"><a href="assets/method.png" target="_blank" rel="noopener noreferrer" aria-label="Open full-resolution method figure"><img src="assets/method.png" width="1942" height="809" loading="lazy" alt="Scene-level region prior is injected into region inference, retrieval, dual-anchor grounding, bilingual generation, and consistency checking, but bypasses open terminal observation."></a><figcaption data-zh="方法概览。基于提供的场景图片绘制的 AI 辅助概念组合图；不代表真实轨迹的精确度量配准。点击查看原图。" data-en="Method overview. AI-assisted conceptual composite based on supplied scene images; not metric registration of a robot trajectory. Select the image for full resolution.">Method overview. AI-assisted conceptual composite based on supplied scene images; not metric registration of a robot trajectory. Select the image for full resolution.</figcaption></figure>
+      <p class="small-label" data-zh="选择一个阶段查看说明" data-en="SELECT A STAGE TO EXPLORE">SELECT A STAGE TO EXPLORE</p>
+      <div class="stage-selector" role="group" aria-label="Annotation pipeline stages">
+        <button type="button" data-stage="0" aria-pressed="true"><span>01</span><b data-zh="区域判断" data-en="Region inference">Region inference</b><small data-zh="场景先验" data-en="Scene prior">Scene prior</small></button>
+        <button type="button" data-stage="1" aria-pressed="false"><span>02</span><b data-zh="开放终点观察" data-en="Open observation">Open observation</b><small data-zh="仅观察证据" data-en="Evidence only">Evidence only</small></button>
+        <button type="button" data-stage="2" aria-pressed="false"><span>03</span><b data-zh="规范词检索" data-en="Canonical retrieval">Canonical retrieval</b><small data-zh="本地匹配" data-en="Local matching">Local matching</small></button>
+        <button type="button" data-stage="3" aria-pressed="false"><span>04</span><b data-zh="双锚点对齐" data-en="Dual anchors">Dual anchors</b><small data-zh="前向 + 停靠" data-en="Forward + place">Forward + place</small></button>
+        <button type="button" data-stage="4" aria-pressed="false"><span>05</span><b data-zh="双语生成" data-en="Bilingual generation">Bilingual generation</b><small>EN / ZH</small></button>
+        <button type="button" data-stage="5" aria-pressed="false"><span>06</span><b data-zh="一致性接受门" data-en="Consistency gate">Consistency gate</b><small data-zh="接受 / 复核 / 暂不判断" data-en="Accept / review / abstain">Accept / review / abstain</small></button>
+      </div>
+      <div class="stage-detail" aria-live="polite"><span id="stage-number">01</span><div><h3 id="stage-title">Region inference</h3><p id="stage-copy">Route frames, motion geometry, and the scene vocabulary establish start, goal, and traversed regions. Visible does not mean entered; unknown remains valid when evidence is insufficient.</p><p id="stage-input" class="stage-input">Input: route observations + motion geometry + scene prior.</p></div></div>
+      <p class="method-note" data-zh="“Evidence locked” 表示已对齐的结构化证据约束后续生成，并可审计；不是通过程序强制覆盖最后一句。完整方法使用五次模型调用与一次本地检索。" data-en="“Evidence locked” means grounded structured evidence constrains subsequent generation and remains auditable—not an immutable final-sentence overwrite. The full pipeline uses five model calls and one local retrieval operation.">“Evidence locked” means grounded structured evidence constrains subsequent generation and remains auditable—not an immutable final-sentence overwrite. The full pipeline uses five model calls and one local retrieval operation.</p>
+    </section>
+
+    <section class="section workbench" id="workbench">
+      <div class="section-title"><p class="eyebrow">03 / ANNOTATION WORKBENCH</p><h2 data-zh="让证据与修改放在一起。" data-en="Inspect the evidence. Review the annotation.">Inspect the evidence. Review the annotation.</h2><p data-zh="同步查看前向与侧向图像，检查区域、终点地标、空间关系和双语指令。修改记录与冻结实验产物分离。" data-en="Synchronized evidence playback sits beside regions, terminal landmarks, spatial relations, and bilingual instructions. Curation records stay separate from frozen experimental outputs.">Synchronized evidence playback sits beside regions, terminal landmarks, spatial relations, and bilingual instructions. Curation records stay separate from frozen experimental outputs.</p></div>
+      <figure class="paper-figure"><a href="assets/workbench.png" target="_blank" rel="noopener noreferrer" aria-label="Open full-resolution workbench figure"><img src="assets/workbench.png" width="2055" height="765" loading="lazy" alt="Compact English-localized annotation workbench with evidence playback and editable region and endpoint fields."></a><figcaption data-zh="真实标注系统的英文局部展示。显示文字和布局经 AI 辅助调整，不是未经修改的原始截图。本页不提供在线标注服务。" data-en="English-localized excerpt of the implemented workbench. Display text and layout were adapted with AI assistance; this is not an unedited screenshot. This project page is not a live annotation service.">English-localized excerpt of the implemented workbench. Display text and layout were adapted with AI assistance; this is not an unedited screenshot. This project page is not a live annotation service.</figcaption></figure>
+    </section>
+
+    <section class="section light results" id="results">
+      <div class="section-title"><p class="eyebrow">04 / PRELIMINARY RESULTS</p><h2 data-zh="更少结构化错误。更准确的指令。" data-en="Fewer structured errors in the frozen comparison.">Fewer structured errors in the frozen comparison.</h2><p data-zh="结果来自方法盲化的独立 GPT-5.5 模型评价，不是人工金标准，也不是导航成功率。" data-en="Method-blind independent GPT-5.5 model evaluation—not human gold labels, and not navigation success rates.">Method-blind independent GPT-5.5 model evaluation—not human gold labels, and not navigation success rates.</p></div>
+      <div class="protocol-line"><div><b>20 × 4</b><span data-zh="渲染室内轨迹" data-en="Rendered trajectories">Rendered trajectories</span></div><div><b>10 × 2</b><span data-zh="真机完整轨迹" data-en="Robot-recorded full routes">Robot-recorded full routes</span></div><div><b>10 × 2</b><span data-zh="真机区域任务" data-en="Robot-recorded region tasks">Robot-recorded region tasks</span></div><div><b>40</b><span data-zh="分组盲评请求" data-en="Grouped evaluation calls">Grouped evaluation calls</span></div></div>
+      <div class="result-tabs" role="group" aria-label="Trajectory set"><button type="button" data-result="rendered" aria-pressed="true" data-zh="渲染室内轨迹 · 20 条" data-en="Rendered trajectories · 20 routes">Rendered trajectories · 20 routes</button><button type="button" data-result="robot" aria-pressed="false" data-zh="真机完整轨迹 · 10 条" data-en="Robot-recorded full routes · 10 routes">Robot-recorded full routes · 10 routes</button></div>
+      <div class="result-summary" aria-live="polite"><div><span data-zh="关键错误率 ↓" data-en="Critical-error rate ↓">Critical-error rate ↓</span><strong><span id="error-before">95%</span><i>→</i><span id="error-after">25%</span></strong><small id="error-count">19/20 → 5/20 candidates</small></div><div><span data-zh="可直接使用率 ↑" data-en="Usable without editing ↑">Usable without editing ↑</span><strong><span id="usable-before">5%</span><i>→</i><span id="usable-after">75%</span></strong><small id="usable-count">1/20 → 15/20 candidates</small></div></div>
+      <p class="summary-comparison" data-zh="单次直接生成 → 完整分阶段方法" data-en="Single-pass generation → full staged pipeline">Single-pass generation → full staged pipeline</p>
+      <figure class="paper-figure"><a href="assets/results.png" target="_blank" rel="noopener noreferrer" aria-label="Open full-resolution results plot"><img src="assets/results.png" width="5917" height="2625" loading="lazy" alt="Critical errors and usable outputs: rendered single-pass 95/5 percent, with prior 70/30, staged baseline 55/45, full 25/75; robot single-pass 100/0 and full 20/80."></a><figcaption data-zh="六个完整指令条件的冻结结果。每个渲染条件 20 条，每个真机条件 10 条；技术 pilot 不计入统计。点击查看原图。" data-en="Frozen results for six complete-instruction conditions: 20 routes per rendered condition, 10 per robot-recorded condition. The technical pilot is excluded. Select the image for full resolution.">Frozen results for six complete-instruction conditions: 20 routes per rendered condition, 10 per robot-recorded condition. The technical pilot is excluded. Select the image for full resolution.</figcaption></figure>
+      <div class="result-details"><div><h3 data-zh="配对比较" data-en="Paired comparison">Paired comparison</h3><p data-zh="关键错误差值：渲染轨迹 −70 个百分点，95% 区间 [−90, −45]；真机完整轨迹 −80 个百分点，[−100, −50]。Holm 校正后的精确 McNemar p 值分别为 .0031 和 .0391。" data-en="Critical-error change: −70 percentage points on rendered routes, 95% interval [−90, −45]; −80 on full robot routes, [−100, −50]. Holm-adjusted exact McNemar p values are .0031 and .0391.">Critical-error change: −70 percentage points on rendered routes, 95% interval [−90, −45]; −80 on full robot routes, [−100, −50]. Holm-adjusted exact McNemar p values are .0031 and .0391.</p></div><div><h3 data-zh="接受门仍需复核" data-en="The acceptance gate is not a guarantee">The acceptance gate is not a guarantee</h3><p data-zh="完整方法接受 14/30 条完整候选，其中 2 条仍有关键错误（14.3%）。接受门支持复核优先级，不是自动正确性认证。" data-en="The full pipeline accepts 14 of 30 complete candidates; 2 accepted outputs still have critical errors (14.3%). The gate prioritizes review rather than certifying correctness.">The full pipeline accepts 14 of 30 complete candidates; 2 accepted outputs still have critical errors (14.3%). The gate prioritizes review rather than certifying correctness.</p></div></div>
+      <details class="limits"><summary data-zh="评价协议与限制" data-en="Evaluation protocol and limits">Evaluation protocol and limits</summary><p data-zh="40 个样本组、120 个候选；评价器隐藏方法名、生成中间结果和生成器自评。区间使用 2,000 次配对 bootstrap，六项预定义比较使用 Holm 校正。只有一个建筑体系和一个模型评价器；组件效应仍属初步证据。未建立人工金标准、多人一致性或下游导航执行结果，也未测量人工节时。真机区域任务的关键错误由 7/10 降至 4/10，校正 p=.7500，不构成显著改善。" data-en="40 sample groups, 120 candidates. Method names, generation intermediates, and generator self-reviews are hidden from the evaluator. Intervals use 2,000 paired bootstrap replicates; six predefined comparisons use Holm correction. One building system and one model evaluator limit generalization; component effects remain preliminary. No human gold set, inter-rater agreement, downstream navigation evaluation, or measured labor saving is established. Region-only robot errors fall from 7/10 to 4/10, adjusted p=.7500—not a significant improvement.">40 sample groups, 120 candidates. Method names, generation intermediates, and generator self-reviews are hidden from the evaluator. Intervals use 2,000 paired bootstrap replicates; six predefined comparisons use Holm correction. One building system and one model evaluator limit generalization; component effects remain preliminary. No human gold set, inter-rater agreement, downstream navigation evaluation, or measured labor saving is established. Region-only robot errors fall from 7/10 to 4/10, adjusted p=.7500—not a significant improvement.</p></details>
+    </section>
+
+    <section class="section cases" id="cases">
+      <div class="section-title"><p class="eyebrow">05 / QUALITATIVE EVIDENCE</p><h2 data-zh="保留改善，也保留失败。" data-en="Show the improvement—and the residual failures.">Show the improvement—and the residual failures.</h2><p data-zh="三个案例按固定规则选择，再取标识哈希最小的样本；不是人工挑选最好的结果。" data-en="Cases use fixed selection rules followed by the smallest identifier hash, rather than manually choosing the most persuasive examples.">Cases use fixed selection rules followed by the smallest identifier hash, rather than manually choosing the most persuasive examples.</p></div>
+      <figure class="paper-figure"><a href="assets/cases.jpg" target="_blank" rel="noopener noreferrer" aria-label="Open original case figure"><img src="assets/cases.jpg" width="1200" height="505" loading="lazy" alt="Three original observations: region correction, a residual omitted-turn error, and improvement from scene naming priors."></a><figcaption data-zh="原始观察图。A：区域标签改善；B：终点对齐但起始转弯遗漏；C：场景先验纠正名称。判断 B 的动作错误需要完整时间序列与运动证据，而不仅是终点图。" data-en="Original observations. A: region correction. B: grounded endpoint but an omitted initial turn. C: scene-prior naming correction. Judging the action error in B requires temporal and motion evidence, not only a terminal still.">Original observations. A: region correction. B: grounded endpoint but an omitted initial turn. C: scene-prior naming correction. Judging the action error in B requires temporal and motion evidence, not only a terminal still.</figcaption></figure>
+    </section>
+
+    <section class="section release" id="release">
+      <p class="eyebrow">06 / RELEASE STATUS</p>
+      <div class="release-head"><h2>Coming soon<span>.</span></h2><p data-zh="论文尚未接收。当前先发布研究展示页与仓库占位；论文接收后，再整理并发布研究实现。" data-en="The paper has not yet been accepted. This repository currently publishes the research showcase and a release placeholder. The research implementation will be organized for release after acceptance.">The paper has not yet been accepted. This repository currently publishes the research showcase and a release placeholder. The research implementation will be organized for release after acceptance.</p></div>
+      <div class="release-list"><div><span data-zh="展示页源码" data-en="Project-page source">Project-page source</span><b class="available" data-zh="已公开" data-en="Available">Available</b></div><div><span data-zh="论文全文" data-en="Paper">Paper</span><b>Coming soon</b></div><div><span data-zh="研究实现与复现文档" data-en="Research code & reproduction guide">Research code &amp; reproduction guide</span><b>Coming soon</b></div></div>
+      <a class="button primary" href="https://github.com/tangyipeng100/elias-navigation-annotation" target="_blank" rel="noopener noreferrer" data-zh="查看 GitHub 仓库 ↗" data-en="View the GitHub repository ↗">View the GitHub repository ↗</a>
+      <p class="release-note" data-zh="当前不发布原始实验数据、模型响应、账号凭据或运行日志。论文接收信息与版本引用待正式确认后补充。" data-en="Raw experimental data, model responses, credentials, and operational logs are not included. Venue information and a formal citation will be added only when confirmed.">Raw experimental data, model responses, credentials, and operational logs are not included. Venue information and a formal citation will be added only when confirmed.</p>
+    </section>
+
+    <section class="section authors" id="authors">
+      <p class="eyebrow">07 / AUTHORS</p>
+      <p class="author-list">Yipeng Tang<sup>†</sup>, Haoge Jiang<sup>†</sup>, Qiancheng Ye, Zhixing Song, Chaochao He, Zhenyu Xu, Jinfei Gao, Baoping Cheng, Ting Huang, Qiran Pu<sup>*</sup></p>
+      <p class="affiliation">China Mobile (Hangzhou) Information Technology Co., Ltd.<br>Hangzhou, Zhejiang 311100, China</p>
+      <p class="author-notes"><span data-zh="† 唐艺鹏与蒋昊格共同一作。* 蒲琪然为通讯作者。" data-en="† Yipeng Tang and Haoge Jiang contributed equally. * Qiran Pu is the corresponding author.">† Yipeng Tang and Haoge Jiang contributed equally. * Qiran Pu is the corresponding author.</span><br><a href="mailto:puqiran@cmhi.chinamobile.com">puqiran@cmhi.chinamobile.com</a></p>
+    </section>
+  </main>
+  <footer><span>ELIAS / RESEARCH PREVIEW</span><a href="https://tangyipeng100.github.io/multiview-vln-showcase/" target="_blank" rel="noopener noreferrer" data-zh="另见：视觉语言导航展示 ↗" data-en="Related: multi-view VLN showcase ↗">Related: multi-view VLN showcase ↗</a><a href="#top" data-zh="回到顶部 ↑" data-en="Back to top ↑">Back to top ↑</a></footer>
+</body>
+</html>
