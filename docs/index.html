@@ -43,13 +43,26 @@
         </div>
         <p class="hero-name">EVIDENCE-LOCKED INSTRUCTION ANNOTATION SYSTEM</p>
       </div>
-      <figure class="hero-observation">
-        <img src="assets/terminal-observation.jpg" width="640" height="569" fetchpriority="high" alt="Original terminal camera view with a green chair on the left and a cabinet beside the stopping location.">
-        <figcaption>
-          <span class="eyebrow" data-zh="真实机器人观察" data-en="ORIGINAL ROBOT OBSERVATION">ORIGINAL ROBOT OBSERVATION</span>
-          <strong data-zh="朝向哪里，与停在哪里，是不同的关系。" data-en="Facing an object ≠ stopping beside it.">Facing an object ≠ stopping beside it.</strong>
-          <span data-zh="前向锚点 + 停靠锚点" data-en="Forward anchor + place anchor">Forward anchor + place anchor</span>
-        </figcaption>
+      <figure class="hero-study" aria-label="Scene prior, trajectory evidence, and a frozen bilingual annotation example">
+        <div class="study-header"><span class="eyebrow" data-zh="从场景证据到双语标注" data-en="FROM SCENE EVIDENCE TO ANNOTATION">FROM SCENE EVIDENCE TO ANNOTATION</span><span class="study-tag" data-zh="冻结案例" data-en="FROZEN EXAMPLE">FROZEN EXAMPLE</span></div>
+        <div class="study-prior">
+          <div class="study-label"><span class="study-symbol">+</span><b data-zh="区域先验" data-en="Region prior">Region prior</b><span data-zh="场景级命名参考" data-en="Scene-level naming reference">Scene-level naming reference</span></div>
+          <div class="region-vocabulary"><span>R1 <b data-zh="储藏区" data-en="Storage">Storage</b></span><span>R2 <b data-zh="走廊" data-en="Corridor">Corridor</b></span><span>R3 <b data-zh="卧室" data-en="Bedroom">Bedroom</b></span><span>R4 <b data-zh="厨房" data-en="Kitchen">Kitchen</b></span><span class="region-active">P <b data-zh="共享过道" data-en="Shared passage">Shared passage</b></span></div>
+        </div>
+        <div class="study-evidence">
+          <div class="study-label"><span class="study-symbol">↗</span><b data-zh="连续轨迹证据" data-en="Trajectory evidence">Trajectory evidence</b><span data-zh="两个代表性观察" data-en="Two representative views">Two representative views</span></div>
+          <div class="study-views">
+            <div><img src="assets/example-route.jpg" width="960" height="852" fetchpriority="high" alt="Unmodified rendered route observation showing the shared passage, sofa, chairs, red barrier belt, and doorways."><span data-zh="路线观察" data-en="Route observation">Route observation</span></div>
+            <div><img src="assets/example-terminal.jpg" width="960" height="852" fetchpriority="high" alt="Unmodified rendered terminal observation showing the nearer red barrier-belt post and the glass door ahead-left."><span data-zh="终点观察" data-en="Terminal observation">Terminal observation</span></div>
+          </div>
+        </div>
+        <div class="study-output">
+          <div class="study-label"><span class="study-symbol">=</span><b data-zh="语义对齐后的输出" data-en="Grounded output">Grounded output</b><span data-zh="原始候选的终点句节选" data-en="Original terminal-clause excerpt">Original terminal-clause excerpt</span></div>
+          <div class="study-region"><span data-zh="起始 / 终止区域" data-en="Start / goal region">Start / goal region</span><strong>P → P <small data-zh="共享过道" data-en="Shared passage">Shared passage</small></strong></div>
+          <div class="study-instruction"><span>EN</span><p>Stop immediately beside the nearer red barrier-belt post, with the glass door ahead-left.</p></div>
+          <div class="study-instruction"><span>ZH</span><p lang="zh-CN">紧邻较近的红色隔离带立柱停下，玻璃门位于前方偏左。</p></div>
+        </div>
+        <figcaption data-zh="渲染室内轨迹案例 · 场景原图与冻结输出，未重绘、未新增标注。此处仅展示两个观察，不代替完整时间序列证据。" data-en="Rendered indoor trajectory · unmodified scene views and frozen output, not a new annotation. These two views do not replace the full temporal evidence.">Rendered indoor trajectory · unmodified scene views and frozen output, not a new annotation. These two views do not replace the full temporal evidence.</figcaption>
       </figure>
       <div class="hero-strip">
         <span><b>40</b><span data-zh="配对样本组" data-en="paired sample groups">paired sample groups</span></span>
