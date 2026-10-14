@@ -33,7 +33,7 @@ These are model judgments—not human gold labels or navigation success rates. T
 
 ## Authors
 
-Yipeng Tang†, Haoge Jiang†, Qiancheng Ye, Zhixing Song, Chaochao He, Zhenyu Xu, Jinfei Gao, Baoping Cheng, Ting Huang, Qiran Pu*.
+Yipeng Tang†, Haoge Jiang†, Qiancheng Ye, Zijian Tang, Zhixing Song, Chaochao He, Zhenyu Xu, Jinfei Gao, Baoping Cheng, Ting Huang, Qiran Pu*.
 
 China Mobile (Hangzhou) Information Technology Co., Ltd., Hangzhou, Zhejiang 311100, China.
 
